@@ -6,7 +6,7 @@ import { CustomInput } from "../components/CustomInput";
 import { setUser } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Layout } from "../components/Layout";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase-config";
 
 export const Login = () => {
@@ -16,6 +16,11 @@ export const Login = () => {
   const [fromDt, setFormDt] = useState({});
   const { userInfo } = useSelector((state) => state.user);
 
+
+  onAuthStateChanged(auth, (user)=>{
+    user && dispatch(setUser(user))
+    console.log(user)
+  })
   useEffect(() => {
     userInfo?.uid && navigate("/dashboard");
   }, [userInfo]);

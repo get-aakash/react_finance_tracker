@@ -59,11 +59,11 @@ export const MyForm = ({ addTransaction }) => {
             name="type"
             onChange={handleOnChange}
             required
-            defaultValue={formDt.type}
+            
           >
             <option value="">Type... </option>
-            <option value="income">Income</option>
-            <option value="expenses">Expenses</option>
+            <option value="income" selected={formDt.type === 'income'}>Income</option>
+            <option value="expenses" selected={formDt.type === 'expenses'}>Expenses</option>
           </Form.Select>
         </Col>
         <Col md={4}>
