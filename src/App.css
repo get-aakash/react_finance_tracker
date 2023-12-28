@@ -1,8 +1,9 @@
-.title {
-  color: purple;
-  margin-top: 100px;
+.heading{
+    
 }
-
-.main {
-  min-height: 85vh;
+.container{
+    background: whitesmoke;
+    color: black;
+    padding: 60px;
+    margin: auto;
 }
