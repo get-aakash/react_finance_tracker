@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, FormControl, Row } from 'react-bootstrap'
-import Display from './Display'
+
 import { useDispatch } from 'react-redux'
 import { create } from '../redux/formSlice'
 
-const InputForm = () => {
+const InputForm = ({ addTransaction }) => {
     const [formData, setFormData] = useState({})
     const dispatch = useDispatch()
 
@@ -14,9 +14,10 @@ const InputForm = () => {
         setFormData({ ...formData, [name]: value })
     }
 
-    const handleOnSubmit = (e)=>{
+    const handleOnSubmit = (e) => {
         e.preventDefault()
         dispatch(create(formData))
+        addTransaction(formData)
     }
     return (
         <div className='wrapper'>
@@ -24,7 +25,11 @@ const InputForm = () => {
             <Form className='container' onSubmit={handleOnSubmit}>
                 <Row>
                     <Col xs={2}>
-                        <Form.Control placeholder="Type" name='type' onChange={handleOnChange} />
+                        <Form.Select aria-label="Default select example">
+                            <option>Select Type...</option>
+                            <option value="1">...</option>
+                           
+                        </Form.Select>
                     </Col>
                     <Col xs={3}>
                         <Form.Control placeholder="Description" name='description' onChange={handleOnChange} />
@@ -41,7 +46,7 @@ const InputForm = () => {
                 </Row>
             </Form>
             <hr />
-            <Display />
+
 
         </div>
     )
