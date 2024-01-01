@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, FormControl, Row } from 'react-bootstrap'
 
-import { useDispatch } from 'react-redux'
-import { create } from '../redux/formSlice'
 
 const initialState = {
     type:"",
@@ -13,7 +11,7 @@ const initialState = {
 }
 const InputForm = ({ addTransaction }) => {
     const [formData, setFormData] = useState(initialState)
-    const dispatch = useDispatch()
+   
 
 
     const handleOnChange = (e) => {
@@ -25,7 +23,7 @@ const InputForm = ({ addTransaction }) => {
         e.preventDefault()
         console.log(formData)
         
-        dispatch(create(formData))
+       
         addTransaction(formData)
         setFormData(initialState)
     }
