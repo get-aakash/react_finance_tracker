@@ -16,6 +16,7 @@ const InputForm = ({ addTransaction }) => {
 
     const handleOnSubmit = (e) => {
         e.preventDefault()
+        console.log(formData)
         dispatch(create(formData))
         addTransaction(formData)
     }
@@ -23,24 +24,25 @@ const InputForm = ({ addTransaction }) => {
         <div className='wrapper'>
             <h2 className='heading text-center m-3'>Finance Tracker</h2>
             <Form className='container' onSubmit={handleOnSubmit}>
-                <Row>
-                    <Col xs={2}>
-                        <Form.Select aria-label="Default select example">
+                <Row className='gap-2'>
+                    <Col md={2}>
+                        <Form.Select  aria-label="Default select example" name="type" onChange={handleOnChange}>
                             <option>Select Type...</option>
-                            <option value="1">...</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
                            
                         </Form.Select>
                     </Col>
-                    <Col xs={3}>
+                    <Col md={4}>
                         <Form.Control placeholder="Description" name='description' onChange={handleOnChange} />
                     </Col>
-                    <Col xs={2}>
-                        <Form.Control placeholder="Amount" name='amount' onChange={handleOnChange} />
+                    <Col md={2}>
+                        <Form.Control type='number' placeholder="Amount" name='amount' onChange={handleOnChange} />
                     </Col>
                     <Col>
                         <FormControl type='date' name='date' onChange={handleOnChange} />
                     </Col>
-                    <Col>
+                    <Col md={2}>
                         <Button type='submit'>Add</Button>
                     </Col>
                 </Row>
