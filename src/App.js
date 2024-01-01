@@ -1,21 +1,27 @@
-import { useState } from "react";
+
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import InputForm from "./components/InputForm";
-import DisplayData from "./components/DisplayData";
+import Login from "./pages/Login";
+import Registeration from "./pages/Registeration";
+import ForgetPassword from "./pages/ForgetPassword";
+import Dashboard from "./pages/Dashboard";
+
 
 
 function App() {
-  const [listData, setListData] = useState([])
-  const addTransaction = (data)=>{
-    
-    setListData([...listData, data])
-  }
-  console.log(listData)
+
   return (
     <div className="App">
-      <InputForm addTransaction={addTransaction} />
-      
-      <DisplayData listData= {listData} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />}/>
+          <Route path="/register" element={<Registeration />}/>
+          <Route path="password-reset" element={<ForgetPassword />}/>
+          <Route path="dashboard" element={<Dashboard />} />
+
+          
+        </Routes></BrowserRouter>
+
     </div>
   );
 }

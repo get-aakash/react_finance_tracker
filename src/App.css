@@ -1,9 +1,12 @@
 .heading{
     
 }
-.container{
+.wrapper{
     background: whitesmoke;
     color: black;
     padding: 60px;
     margin: auto;
+}
+.main{
+    min-height: 85vh;
 }

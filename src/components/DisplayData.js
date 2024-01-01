@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Table } from 'react-bootstrap'
 
-const DisplayData = ({listData}) => {
+const DisplayData = ({listData, handleOnDelete}) => {
     console.log(listData)
 
     const total = listData.reduce((acc, item)=>{
@@ -12,6 +12,7 @@ const DisplayData = ({listData}) => {
         return acc - +item.amount
       }
     },0)
+    
   return (
     <Table striped bordered hover className='mt-5 '>
       <thead>
@@ -35,7 +36,7 @@ const DisplayData = ({listData}) => {
             <td className='text-danger fw-bolder'>-{data.amount}</td></>)}
             
             
-            <td><Button variant='danger fw-bolder'>Delete</Button></td>
+            <td><Button variant='danger fw-bolder' onClick={()=>handleOnDelete(index)}>Delete</Button></td>
           </tr> 
           
 
