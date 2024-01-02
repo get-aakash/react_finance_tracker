@@ -3,12 +3,19 @@ import Layout from '../components/Layout'
 import { Form, Button } from 'react-bootstrap'
 import CustomInput from '../components/CustomInput'
 import { toast } from 'react-toastify'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../firebase/firebase-config'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { auth, db } from '../firebase/firebase-config'
+import { useNavigate } from 'react-router-dom'
+import { doc, setDoc } from 'firebase/firestore'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../redux/user/UserSlice'
 
 const Registeration = () => {
     const [formData, setFormData] = useState({})
     const [error, setError] = useState("")
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const inputs = [{
         label: "First Name",
         name: 'fName',
@@ -64,8 +71,39 @@ const Registeration = () => {
         if(cPassword !== rest.password){
             return toast.error("Password do not match!!!")
         }
-        const response = await createUserWithEmailAndPassword(auth, formData.email, formData.password )
-        console.log(response)
+        const responsePromise=  createUserWithEmailAndPassword(auth, formData.email, formData.password )
+        toast.promise(responsePromise,{
+            pending:"Please wait..."
+        })
+        try {
+            const {user} = await responsePromise
+            if(user?.uid){
+                
+                
+                updateProfile(user,{
+                    displayName: formData.fName
+                })
+                const userObj = {
+                    fName: formData.fName,
+                    lName: formData.lName,
+                    email: formData.email,
+                }
+                await setDoc(doc(db, "users", user.uid ),userObj)
+                toast.success("Your account is created and redirecting to Dashboard")
+                dispatch(setUser({...userObj, uid: user.uid}))
+                navigate('/dashboard')
+            }
+            
+        } catch (error) {
+            let msg = error.message
+            if(msg.includes("auth/email-already-in-use")){
+                msg = "Email already in use"
+            }
+            toast.error(msg)
+            
+        }
+        
+        
     }
     return (
         <Layout>
