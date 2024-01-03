@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { Form, Row, Col, InputGroup, Button } from 'react-bootstrap'
 import CustomInput from '../components/CustomInput'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../redux/user/UserSlice'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase/firebase-config'
@@ -13,6 +13,12 @@ const Login = () => {
     const [formData, setFormData]= useState({})
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const {userInfo} = useSelector(state=>state.user)
+
+    useEffect(()=>{
+        userInfo?.uid && navigate('/dashboard')
+
+    },[userInfo])
     
     const inputs = [{
         label: "Email",
@@ -42,8 +48,18 @@ const Login = () => {
             pending:"please wait..."
         })
         const {user} = await responsePending
+        if(user?.uid){
+            sessionStorage.setItem("accessToken", user.accessToken)
+            localStorage.setItem("refreshToken", user.refreshToken)
+            const userObj = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName
+            }
+            dispatch(setUser(user))
+        }
         console.log(user)
-        dispatch(setUser(formData))
+        
         navigate("/dashboard")
 
     }
