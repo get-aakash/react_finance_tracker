@@ -5,6 +5,9 @@ import CustomInput from '../components/CustomInput'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../redux/user/UserSlice'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebase/firebase-config'
+import { toast } from 'react-toastify'
 
 const Login = () => {
     const [formData, setFormData]= useState({})
@@ -32,8 +35,14 @@ const Login = () => {
 
         })
     }
-    const handleOnSubmit = (e)=>{
+    const handleOnSubmit = async (e)=>{
         e.preventDefault()
+        const responsePending = signInWithEmailAndPassword(auth, formData.email, formData.password)
+        toast.promise(responsePending,{
+            pending:"please wait..."
+        })
+        const {user} = await responsePending
+        console.log(user)
         dispatch(setUser(formData))
         navigate("/dashboard")
 
