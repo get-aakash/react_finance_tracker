@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import InputForm from '../components/InputForm'
 import DisplayData from '../components/DisplayData'
 import Layout from '../components/Layout'
+import { setUser } from '../redux/user/UserSlice'
 
 
 const Dashboard = () => {
@@ -11,7 +12,17 @@ const Dashboard = () => {
       
       setListData([...listData, data])
     }
-    console.log(listData)
+    useEffect(() => {
+      const userStr = sessionStorage.getItem("logedInUser");
+      if (userStr) {
+        setUser(JSON.parse(userStr));
+      }
+  
+      //pars json
+      //set stat
+      console.log(userStr)
+    }, []);
+    
     const handleOnDelete = (id)=>{
       if(window.confirm("Are you sure to delete this transaction?")){
         const response = listData.filter((item,i)=>i !== id)

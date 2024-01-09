@@ -43,7 +43,8 @@ const Login = () => {
     }
     const handleOnSubmit = async (e)=>{
         e.preventDefault()
-        const responsePending = signInWithEmailAndPassword(auth, formData.email, formData.password)
+        try {
+            const responsePending = signInWithEmailAndPassword(auth, formData.email, formData.password)
         toast.promise(responsePending,{
             pending:"please wait..."
         })
@@ -56,11 +57,24 @@ const Login = () => {
                 email: user.email,
                 displayName: user.displayName
             }
-            dispatch(setUser(user))
-        }
-        console.log(user)
+            setTimeout(() => {
+                dispatch(setUser(userObj));
+              }, 2000);
+              console.log(userInfo)
+              return toast.success("Logged in successfully, Redirecting now");
+            }
         
-        navigate("/dashboard")
+        
+            
+        } catch (error) {
+            let msg = error.message
+            if(error.message.includes("(auth/wrong-password)"))(
+                msg = "Invalid login details"
+            )
+            toast.error(msg)
+            
+        }
+        
 
     }
     return (
