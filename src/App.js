@@ -20,7 +20,10 @@ function App() {
           <Route path="/register" element={<Registeration />} />
           <Route path="password-reset" element={<ForgetPassword />} />
           <Route path="dashboard" element={
-          <PrivateRoute><Dashboard /></PrivateRoute>} />
+
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />

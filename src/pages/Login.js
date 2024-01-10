@@ -52,6 +52,7 @@ const Login = () => {
         if(user?.uid){
             sessionStorage.setItem("accessToken", user.accessToken)
             localStorage.setItem("refreshToken", user.refreshToken)
+            sessionStorage.setItem("logedInUser", JSON.stringify(user));
             const userObj = {
                 uid: user.uid,
                 email: user.email,

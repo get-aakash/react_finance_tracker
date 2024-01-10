@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, FormControl, Row } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { getTransaction, postTransaction } from '../redux/transaction/Transaction'
+import { addDoc, collection } from 'firebase/firestore'
+import { toast } from 'react-toastify'
+import { db } from '../firebase/firebase-config'
 
 
 const initialState = {
@@ -11,6 +16,9 @@ const initialState = {
 }
 const InputForm = ({ addTransaction }) => {
     const [formData, setFormData] = useState(initialState)
+    const dispatch = useDispatch()
+
+    const {userInfo} = useSelector((state)=>state.user)
    
 
 
@@ -19,13 +27,22 @@ const InputForm = ({ addTransaction }) => {
         setFormData({ ...formData, [name]: value })
     }
 
-    const handleOnSubmit = (e) => {
+    const handleOnSubmit = async(e) => {
         e.preventDefault()
         console.log(formData)
         
+        const obj = {
+            ...formData, userId: userInfo.uid, createdAt: Date.now()
+        }
+
+        const docRef = await addDoc(collection(db,"transactions"), obj)
+        if(docRef?.id){
+            setFormData(initialState)
+            dispatch(getTransaction(userInfo.uid))
+            return toast.success("The transaction has been added")
+        }
        
-        addTransaction(formData)
-        setFormData(initialState)
+        
     }
     return (
         <div className='wrapper'>

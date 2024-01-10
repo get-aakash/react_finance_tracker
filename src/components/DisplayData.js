@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Table } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { getTransaction } from '../redux/transaction/Transaction'
 
-const DisplayData = ({listData, handleOnDelete}) => {
-    console.log(listData)
+const DisplayData = () => {
+    const dispatch = useDispatch()
+    const {userInfo} = useSelector(state => state.user)
+    const {trans} = useSelector(state => state.transaction)
 
-    const total = listData.reduce((acc, item)=>{
+    useEffect(()=>{
+        dispatch(getTransaction(userInfo.uid))
+    },[dispatch])
+    const total = trans.reduce((acc, item)=>{
       if(item.type=== "income"){
         return acc + +item.amount
       }
@@ -26,7 +33,7 @@ const DisplayData = ({listData, handleOnDelete}) => {
         </tr>
       </thead>
       <tbody>
-        {listData.map((data,index)=>(
+        {trans.map((data,index)=>(
             <tr key={index}>
             <td>{index + 1}</td>
             <td>{data.date}</td>
@@ -36,7 +43,7 @@ const DisplayData = ({listData, handleOnDelete}) => {
             <td className='text-danger fw-bolder'>-{data.amount}</td></>)}
             
             
-            <td><Button variant='danger fw-bolder' onClick={()=>handleOnDelete(index)}>Delete</Button></td>
+            <td><Button variant='danger fw-bolder' >Delete</Button></td>
           </tr> 
           
 
