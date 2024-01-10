@@ -2,6 +2,9 @@ import React, { useEffect } from 'react'
 import { Button, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTransaction } from '../redux/transaction/Transaction'
+import { deleteDoc, doc } from 'firebase/firestore'
+import { db } from '../firebase/firebase-config'
+import { toast } from 'react-toastify'
 
 const DisplayData = () => {
     const dispatch = useDispatch()
@@ -19,7 +22,18 @@ const DisplayData = () => {
         return acc - +item.amount
       }
     },0)
-    
+    const handleOnDelete = async(id)=>{
+      if(window.confirm("Are you sure you want to delete this")){
+        try {
+          await deleteDoc(doc(db, "transactions", id))
+       toast.success("Transaction has been deleted")
+       dispatch(getTransaction(userInfo.uid))
+        } catch (error) {
+          toast.error(error.message)
+        }
+       
+      }
+    }
   return (
     <Table striped bordered hover className='mt-5 '>
       <thead>
@@ -43,7 +57,7 @@ const DisplayData = () => {
             <td className='text-danger fw-bolder'>-{data.amount}</td></>)}
             
             
-            <td><Button variant='danger fw-bolder' >Delete</Button></td>
+            <td className='text-center'><Button onClick={()=>handleOnDelete(data.id)} variant='danger' className='btn-sm' ><i className="fa-solid fa-trash"></i></Button></td>
           </tr> 
           
 

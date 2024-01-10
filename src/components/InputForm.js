@@ -51,7 +51,7 @@ const InputForm = ({ addTransaction }) => {
                 <Row className='gap-2'>
                     <Col md={2}>
                         <Form.Select  aria-label="Default select example" name="type" onChange={handleOnChange} required defaultValue={formData.type}>
-                            <option>Select Type...</option>
+                            <option value="">Select Type...</option>
                             <option value="income" selected={formData.type==="income"}>Income</option>
                             <option value="expense" selected={formData.type==="expense"}>Expense</option>
                            
