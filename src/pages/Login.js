@@ -5,7 +5,7 @@ import CustomInput from '../components/CustomInput'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../redux/user/UserSlice'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase/firebase-config'
 import { toast } from 'react-toastify'
 
@@ -15,6 +15,9 @@ const Login = () => {
     const dispatch = useDispatch()
     const {userInfo} = useSelector(state=>state.user)
 
+    onAuthStateChanged(auth, (user)=>{
+        user && dispatch(setUser(user))
+    })
     useEffect(()=>{
         userInfo?.uid && navigate('/dashboard')
 
